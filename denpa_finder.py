@@ -24,5 +24,5 @@ class DenpaFinder:
 
 df = DenpaFinder()
 
-print(df.perfect_matches("yaseta"))
+print(df.perfect_matches("EVERYTOON"))
 # print(df.good_matches("T★GIRLS", ratio=0.4))

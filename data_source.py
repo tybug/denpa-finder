@@ -33,8 +33,9 @@ import requests
 
 
 class Album:
-    def __init__(self, title, download_url=None):
+    def __init__(self, title, location, download_url=None):
         self.title = unicodedata.normalize("NFKC", title)
+        self.location = location
         self.download_url = download_url
 
     def contains(self, title):
@@ -46,7 +47,8 @@ class Album:
         return SequenceMatcher(a=self.title.lower(), b=title.lower()).ratio()
 
     def __str__(self):
-        return f"Album(title={self.title}, download_url={self.download_url})"
+        return (f"Album(title={self.title}, location={self.location}, "
+            f"download_url={self.download_url})")
     __repr__ = __str__
 
     def __hash__(self):
@@ -64,13 +66,13 @@ class RapeTheLolis(AlbumSource):
     URL = "http://denpa.omaera.org/RapeTheLolis_dump.html"
 
     def albums(self):
-        r = requests.get("http://denpa.omaera.org/RapeTheLolis_dump.html")
+        r = requests.get(self.URL)
         r.encoding = "UTF-8"
         soup = BeautifulSoup(r.text, features="lxml")
 
         albums = []
         for a in soup.find_all("a"):
-            album = Album(a.text, a["href"])
+            album = Album(a.text, self.URL, download_url=a["href"])
             albums.append(album)
         return albums
 
@@ -90,7 +92,8 @@ class SilenceTheDiscord(AlbumSource):
         return albums
 
     def _albums_from_page(self, page):
-        r = requests.get(f"{self.BASE_URL}/{page}")
+        url = f"{self.BASE_URL}/{page}"
+        r = requests.get(url)
         r.encoding = "UTF-8"
         soup = BeautifulSoup(r.text, features="lxml")
 
@@ -116,6 +119,6 @@ class SilenceTheDiscord(AlbumSource):
                     # described above.
                     if title == "":
                         continue
-                    album = Album(title)
+                    album = Album(title, url)
                     albums.append(album)
         return albums
