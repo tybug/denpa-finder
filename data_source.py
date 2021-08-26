@@ -1,9 +1,8 @@
-from difflib import SequenceMatcher
 from abc import abstractmethod, ABC
 import unicodedata
 import re
 
-
+from fuzzywuzzy import fuzz
 from bs4 import BeautifulSoup, NavigableString
 import requests
 
@@ -44,7 +43,7 @@ class Album:
 
     def ratio(self, title):
         title = unicodedata.normalize("NFKC", title)
-        return SequenceMatcher(a=self.title.lower(), b=title.lower()).ratio()
+        return fuzz.partial_ratio(self.title.lower(), title.lower()) / 100
 
     def __str__(self):
         return (f"Album(title={self.title}, location={self.location}, "

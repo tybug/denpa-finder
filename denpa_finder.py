@@ -14,7 +14,7 @@ class DenpaFinder:
                 ret.append(album)
         return ret
 
-    def good_matches(self, query, ratio=0.3):
+    def good_matches(self, query, ratio=0.8):
         good_matches = []
 
         for album in self.albums:
