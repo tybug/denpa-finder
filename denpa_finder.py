@@ -22,9 +22,3 @@ class DenpaFinder:
             if album.ratio(query) >= ratio:
                 good_matches.append(album)
         return good_matches
-
-df = DenpaFinder()
-
-import pprint
-pprint.pprint(df.perfect_matches("Sugar Bunny"), indent=4)
-# pprint.pprint(df.good_matches("Rebirth"), indent=4)
