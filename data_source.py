@@ -60,7 +60,7 @@ class AlbumSource(ABC):
         pass
 
 
-# listen, I don't choose the names of the dumps
+# listen, I don't choose the name of the dumps
 class RapeTheLolis(AlbumSource):
     URL = "http://denpa.omaera.org/RapeTheLolis_dump.html"
 
@@ -78,7 +78,7 @@ class RapeTheLolis(AlbumSource):
 
 class SilenceTheDiscord(AlbumSource):
     BASE_URL = "http://135.181.29.38"
-    # useful test cases:
+    # useful test cases (all of these are legitimate entries in the dump):
     # [**C94**] 領域ZERO - 東方空宴歌-NEVER- [**FLAC+SCANS**]
     # [C97] Baguettes Ensemble - Toho Jazz Connection Vol.6 - (FLAC) (self-rip)
     # {C93] CielArc - 残響のタクティクス (FLAC+log+jpg)
@@ -121,6 +121,7 @@ class SilenceTheDiscord(AlbumSource):
                 album = Album(title, url)
                 albums.append(album)
         return albums
+
 
 class AudioForYou(AlbumSource):
     URL = "https://audioforyou.top/?p=184"

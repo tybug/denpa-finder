@@ -2,6 +2,7 @@ from data_source import RapeTheLolis, SilenceTheDiscord, AudioForYou
 
 class DenpaFinder:
     DATA_SOURCES = [RapeTheLolis(), SilenceTheDiscord(), AudioForYou()]
+
     def __init__(self):
         self.albums = []
         for data_source in self.DATA_SOURCES:
@@ -24,5 +25,6 @@ class DenpaFinder:
 
 df = DenpaFinder()
 
-print(df.perfect_matches("EVERYTOON"))
-# print(df.good_matches("T★GIRLS", ratio=0.4))
+import pprint
+pprint.pprint(df.perfect_matches("Sugar Bunny"), indent=4)
+# pprint.pprint(df.good_matches("Rebirth"), indent=4)
