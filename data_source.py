@@ -99,25 +99,41 @@ class SilenceTheDiscord(AlbumSource):
         albums = []
         for paragraph in soup.find_all("p"):
             for element in paragraph.children:
-                if isinstance(element, NavigableString):
-                    match = self.ALBUM_RE.match(element)
-                    if not match:
-                        continue
-                    title = match.group(1).strip()
-                    # TODO this currently ignores
-                    # Canoue - イセルディア戦記　暗謀と信義の城楼
-                    # because the (C95) marker is alone on the line above so it
-                    # gets parsed as the empty string. We could just take the
-                    # next line as the title on an empty string, except then we
-                    # run into trouble in cases like [various formats] which
-                    # also match our regex and get parsed as the empty string,
-                    # but are not followed by an album title.
-                    # That said, false negatives are significantly worse than
-                    # false positives due to our fuzzy string matching pass at
-                    # the end, so it's probably worth implementing what I
-                    # described above.
-                    if title == "":
-                        continue
-                    album = Album(title, url)
-                    albums.append(album)
+                if not isinstance(element, NavigableString):
+                    continue
+                match = self.ALBUM_RE.match(element)
+                if not match:
+                    continue
+                title = match.group(1).strip()
+                # TODO this currently ignores
+                # Canoue - イセルディア戦記　暗謀と信義の城楼
+                # because the (C95) marker is alone on the line above so it gets
+                # parsed as the empty string. We could just take the next line
+                # as the title on an empty string, except then we run into
+                # trouble in cases like [various formats] which also match our
+                # regex and get parsed as the empty string, but are not followed
+                # by an album title. That said, false negatives are
+                # significantly worse than false positives due to our fuzzy
+                # string matching pass at the end, so it's probably worth
+                # implementing what I described above.
+                if title == "":
+                    continue
+                album = Album(title, url)
+                albums.append(album)
+        return albums
+
+class AudioForYou(AlbumSource):
+    URL = "https://audioforyou.top/?p=184"
+    def albums(self):
+        r = requests.get(self.URL)
+        r.encoding = "UTF-8"
+        soup = BeautifulSoup(r.text, features="lxml")
+
+        albums = []
+        for element in soup.select_one(".su-spoiler-content").children:
+            if isinstance(element, NavigableString):
+                continue
+            title = element.text.strip()
+            album = Album(title, self.URL)
+            albums.append(album)
         return albums
