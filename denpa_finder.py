@@ -1,7 +1,8 @@
-from data_source import RapeTheLolis, SilenceTheDiscord, AudioForYou
+from data_source import RapeTheLolis, SilenceTheDiscord, AudioForYou, DenpaGist
 
 class DenpaFinder:
-    DATA_SOURCES = [RapeTheLolis(), SilenceTheDiscord(), AudioForYou()]
+    DATA_SOURCES = [RapeTheLolis(), SilenceTheDiscord(), AudioForYou(),
+        DenpaGist()]
 
     def __init__(self):
         self.albums = []

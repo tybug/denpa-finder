@@ -125,6 +125,7 @@ class SilenceTheDiscord(AlbumSource):
 
 class AudioForYou(AlbumSource):
     URL = "https://audioforyou.top/?p=184"
+
     def albums(self):
         r = requests.get(self.URL)
         r.encoding = "UTF-8"
@@ -136,5 +137,34 @@ class AudioForYou(AlbumSource):
                 continue
             title = element.text.strip()
             album = Album(title, self.URL)
+            albums.append(album)
+        return albums
+
+class DenpaGist(AlbumSource):
+    URL = "https://gist.github.com/dnpcllctns/f79394cd283ee30834ee6e4bb484b502"
+    URL_RAW = "https://gist.githubusercontent.com/dnpcllctns/f79394cd283ee30834ee6e4bb484b502/raw"
+    DOWNLOAD_RE = re.compile(r"(.*?)\s*?-\s*?(https://mega\.nz.*)")
+
+    def albums(self):
+        r = requests.get(self.URL_RAW)
+        r.encoding = "UTF-8"
+        lines = r.text.split("\n")
+        lines = iter(lines)
+
+        line = next(lines)
+        while "June - December 2018" not in line:
+            line = next(lines)
+
+        albums = []
+        for line in lines:
+            match = self.DOWNLOAD_RE.search(line)
+
+            title = line
+            download_url = None
+            if match:
+                title = match.group(1)
+                download_url = match.group(2)
+
+            album = Album(title, self.URL, download_url)
             albums.append(album)
         return albums
