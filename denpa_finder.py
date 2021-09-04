@@ -9,17 +9,9 @@ class DenpaFinder:
         for data_source in self.DATA_SOURCES:
             self.albums += data_source.albums()
 
-    def perfect_matches(self, query):
+    def matches(self, query, ratio=0.8):
         ret = []
         for album in self.albums:
-            if album.contains(query):
+            if album.contains(query) or album.ratio(query) >= ratio:
                 ret.append(album)
         return ret
-
-    def good_matches(self, query, ratio=0.8):
-        good_matches = []
-
-        for album in self.albums:
-            if album.ratio(query) >= ratio:
-                good_matches.append(album)
-        return good_matches
