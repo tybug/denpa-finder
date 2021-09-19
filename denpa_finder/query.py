@@ -22,7 +22,7 @@ class Query:
     def __or__(self, q2):
         return self.op2_combine(or_, q2)
 
-    def __not__(self):
+    def __invert__(self):
         return self.op1_combine(not_)
 
     def __call__(self, assignment):
@@ -31,7 +31,7 @@ class Query:
 
 class AtomicQuery(Query):
     def __init__(self, query):
-        # take set(list(x)) instead of set(x) to avoid x being split up when
+        # take set([x]) instead of set(x) to avoid x being split up when
         # it's an iterable (set("ab") == {"a", "b"}, not {"ab"})
         queries = set([query])
 
