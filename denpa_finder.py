@@ -9,9 +9,13 @@ class DenpaFinder:
         for data_source in self.DATA_SOURCES:
             self.albums += data_source.albums()
 
-    def matches(self, query, ratio=0.8):
+    def matches(self, q, ratio=0.8):
         ret = []
         for album in self.albums:
-            if album.contains(query) or album.ratio(query) >= ratio:
+            assignment = {}
+            for query in q.queries:
+                is_match = album.contains(query) or album.ratio(query) >= ratio
+                assignment[query] = is_match
+            if q(assignment):
                 ret.append(album)
         return ret
