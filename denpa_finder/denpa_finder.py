@@ -1,4 +1,7 @@
-from data_source import RapeTheLolis, SilenceTheDiscord, AudioForYou, DenpaGist
+from denpa_finder.data_source import (RapeTheLolis, SilenceTheDiscord,
+    AudioForYou, DenpaGist)
+from denpa_finder.query import Q
+
 
 class DenpaFinder:
     DATA_SOURCES = [RapeTheLolis(), SilenceTheDiscord(), AudioForYou(),
@@ -10,6 +13,9 @@ class DenpaFinder:
             self.albums += data_source.albums()
 
     def matches(self, q, ratio=0.8):
+        if isinstance(q, str):
+            q = Q(q)
+
         ret = []
         for album in self.albums:
             assignment = {}
