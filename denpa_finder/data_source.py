@@ -1,6 +1,8 @@
 from abc import abstractmethod, ABC
 import unicodedata
 import re
+from pathlib import Path
+import pickle
 
 from fuzzywuzzy import fuzz
 from bs4 import BeautifulSoup, NavigableString
@@ -55,16 +57,37 @@ class Album:
 
 
 class AlbumSource(ABC):
+    def __init__(self, key):
+        self.albums = None
+
+        self.data_file = Path(__file__).parent / f"{key}.pickle"
+        if self.data_file.exists():
+            with open(self.data_file, "rb") as f:
+                self.albums = pickle.load(f)
+        else:
+            self.refresh()
+
     @abstractmethod
-    def albums(self):
+    def retrieve_albums(self):
         pass
+
+    def refresh(self):
+        self.albums = self.retrieve_albums()
+        self.save()
+
+    def save(self):
+        with open(self.data_file, "wb") as f:
+            pickle.dump(self.albums, f)
 
 
 # listen, I don't choose the name of the dumps
 class RapeTheLolis(AlbumSource):
     URL = "http://denpa.omaera.org/RapeTheLolis_dump.html"
 
-    def albums(self):
+    def __init__(self):
+        super().__init__("rape_the_lolis")
+
+    def retrieve_albums(self):
         r = requests.get(self.URL)
         r.encoding = "UTF-8"
         soup = BeautifulSoup(r.text, features="lxml")
@@ -75,7 +98,6 @@ class RapeTheLolis(AlbumSource):
             albums.append(album)
         return albums
 
-
 class SilenceTheDiscord(AlbumSource):
     BASE_URL = "http://135.181.29.38"
     # useful test cases (all of these are legitimate entries in the dump):
@@ -84,7 +106,10 @@ class SilenceTheDiscord(AlbumSource):
     # {C93] CielArc - 残響のタクティクス (FLAC+log+jpg)
     ALBUM_RE = re.compile(r"^(?:\*+?|{|【|\[|\().+?(?:\*+?】|\]|\)|})(.*)")
 
-    def albums(self):
+    def __init__(self):
+        super().__init__("silence_the_discord")
+
+    def retrieve_albums(self):
         albums = []
         for page in ["comiket", "reitaisai", "m3", "misc", "requests"]:
             albums += self._albums_from_page(page)
@@ -126,7 +151,10 @@ class SilenceTheDiscord(AlbumSource):
 class AudioForYou(AlbumSource):
     URL = "https://audioforyou.top/?p=184"
 
-    def albums(self):
+    def __init__(self):
+        super().__init__("audio_for_you")
+
+    def retrieve_albums(self):
         r = requests.get(self.URL)
         r.encoding = "UTF-8"
         soup = BeautifulSoup(r.text, features="lxml")
@@ -145,7 +173,10 @@ class DenpaGist(AlbumSource):
     URL_RAW = "https://gist.githubusercontent.com/dnpcllctns/f79394cd283ee30834ee6e4bb484b502/raw"
     DOWNLOAD_RE = re.compile(r"(.*?)\s*?-\s*?(https://mega\.nz.*)")
 
-    def albums(self):
+    def __init__(self):
+        super().__init__("denpa_gist")
+
+    def retrieve_albums(self):
         r = requests.get(self.URL_RAW)
         r.encoding = "UTF-8"
         lines = r.text.split("\n")

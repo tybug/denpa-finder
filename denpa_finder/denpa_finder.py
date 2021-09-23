@@ -10,7 +10,11 @@ class DenpaFinder:
     def __init__(self):
         self.albums = []
         for data_source in self.DATA_SOURCES:
-            self.albums += data_source.albums()
+            self.albums += data_source.albums
+
+    def refresh(self):
+        for data_source in self.DATA_SOURCES:
+            data_source.refresh()
 
     def matches(self, q, ratio=0.8):
         if isinstance(q, str):
