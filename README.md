@@ -1,6 +1,6 @@
 # Denpa Finder
 
-Searches several well known denpa / jcore dumps (called "data sources") for albums matching a certain query.
+Searches several denpa / jcore dumps (called "data sources") for albums matching a certain query.
 
 ### Current Data Sources
 
