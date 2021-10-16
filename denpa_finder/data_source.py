@@ -3,6 +3,7 @@ import unicodedata
 import re
 from pathlib import Path
 import pickle
+import codecs
 
 from fuzzywuzzy import fuzz
 from bs4 import BeautifulSoup, NavigableString
@@ -80,12 +81,11 @@ class AlbumSource(ABC):
             pickle.dump(self.albums, f)
 
 
-# listen, I don't choose the name of the dumps
-class RapeTheLolis(AlbumSource):
-    URL = "http://denpa.omaera.org/RapeTheLolis_dump.html"
+class RTL(AlbumSource):
+    URL = f"http://denpa.omaera.org/{codecs.encode('EncrGurYbyvf_qhzc')}.html"
 
     def __init__(self):
-        super().__init__("rape_the_lolis")
+        super().__init__("rtl")
 
     def retrieve_albums(self):
         r = requests.get(self.URL)

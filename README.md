@@ -4,7 +4,7 @@ Searches several well known denpa / jcore dumps (called "data sources") for albu
 
 ### Current Data Sources
 
-* Rape The Lolis: <http://denpa.omaera.org/RapeTheLolis_dump.html>
+* RTL
 * Silence The Discord (all pages, even requests): <http://135.181.29.38>
 * Audio For You: <https://audioforyou.top/?p=184>
 * Denpa Gist: <https://gist.github.com/dnpcllctns/f79394cd283ee30834ee6e4bb484b502>

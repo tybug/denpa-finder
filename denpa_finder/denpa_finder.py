@@ -1,11 +1,10 @@
-from denpa_finder.data_source import (RapeTheLolis, SilenceTheDiscord,
+from denpa_finder.data_source import (RTL, SilenceTheDiscord,
     AudioForYou, DenpaGist)
 from denpa_finder.query import Q
 
 
 class DenpaFinder:
-    DATA_SOURCES = [RapeTheLolis(), SilenceTheDiscord(), AudioForYou(),
-        DenpaGist()]
+    DATA_SOURCES = [RTL(), SilenceTheDiscord(), AudioForYou(), DenpaGist()]
 
     def __init__(self):
         self.albums = []
