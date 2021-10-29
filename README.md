@@ -13,6 +13,7 @@ Searches several denpa / jcore dumps (called "data sources") for albums matching
 
 ```python
 git clone https://github.com/tybug/denpa-finder
+cd denpa-finder
 pip install -e .
 ```
 
