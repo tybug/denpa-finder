@@ -11,10 +11,8 @@ Searches several denpa / jcore dumps (called "data sources") for albums matching
 
 ### Installation
 
-First install the requirements, then install the package locally:
-
 ```python
-pip install -r requirements.txt
+git clone https://github.com/tybug/denpa-finder
 pip install -e .
 ```
 

@@ -1,3 +1,0 @@
-fuzzywuzzy
-bs4
-requests
