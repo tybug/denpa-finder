@@ -15,9 +15,9 @@ with open("denpa_finder/version.py") as f:
             "denpa_finder/version.py")
 
 setup(
-    name = "denpa_finder",
-    version = VERSION,
-    packages = find_packages(),
+    name="denpa-finder",
+    version=VERSION,
+    packages=find_packages(),
     install_requires=[
         "fuzzywuzzy",
         "bs4",
