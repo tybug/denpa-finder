@@ -13,7 +13,7 @@ Searches several denpa / jcore dumps (called "data sources") for albums matching
 
 Install from pip:
 
-```python
+```bash
 pip install denpa-finder
 ```
 
