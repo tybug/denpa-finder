@@ -4,6 +4,10 @@ from denpa_finder.query import Q
 
 
 class DenpaFinder:
+    # TODO decrease import-time overhead by not instantiating these on init
+    # (make them singletons or not class based?). Currently each data source
+    # retrieves its albums on init of denpa_finder as a whole, even before any
+    # DenpaFinder class is constructed
     DATA_SOURCES = [RTL(), SilenceTheDiscord(), AudioForYou(), DenpaGist()]
 
     def __init__(self):
