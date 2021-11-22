@@ -81,8 +81,9 @@ class AlbumSource(ABC):
             pickle.dump(self.albums, f)
 
 
+encoded = codecs.encode("EncrGurYbyvf_qhzc", "rot-13")
 class RTL(AlbumSource):
-    URL = f"http://denpa.omaera.org/{codecs.encode('EncrGurYbyvf_qhzc')}.html"
+    URL = f"http://denpa.omaera.org/{encoded}.html"
 
     def __init__(self):
         super().__init__("rtl")
