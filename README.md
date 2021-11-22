@@ -11,10 +11,10 @@ Searches several denpa / jcore dumps (called "data sources") for albums matching
 
 ### Installation
 
-```python
-git clone https://github.com/tybug/denpa-finder
-cd denpa-finder
-pip install -e .
+Install from pip:
+
+```bash
+pip install denpa-finder
 ```
 
 ### Usage
