@@ -150,7 +150,7 @@ class SilenceTheDiscord(AlbumSource):
 
 
 class AudioForYou(AlbumSource):
-    URL = "https://audioforyou.top/?p=184"
+    URL = "https://audioforyou.top/j-core-compilation/"
 
     def __init__(self):
         super().__init__("audio_for_you")
