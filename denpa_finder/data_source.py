@@ -105,7 +105,10 @@ class SilenceTheDiscord(AlbumSource):
     # [**C94**] 領域ZERO - 東方空宴歌-NEVER- [**FLAC+SCANS**]
     # [C97] Baguettes Ensemble - Toho Jazz Connection Vol.6 - (FLAC) (self-rip)
     # {C93] CielArc - 残響のタクティクス (FLAC+log+jpg)
+    # TODO this regex currently fails on:
+    # Canoue - イセルディア戦記　暗謀と信義の城楼
     ALBUM_RE = re.compile(r"^(?:\*+?|{|【|\[|\().+?(?:\*+?】|\]|\)|})(.*)")
+    DOWNLOAD_URL_RE = re.compile(r"(?:DL|DOWNLOAD).*?:(.*)")
 
     def __init__(self):
         super().__init__("silence_the_discord")
@@ -124,29 +127,55 @@ class SilenceTheDiscord(AlbumSource):
 
         albums = []
         for paragraph in soup.find_all("p"):
+            title = None
+            download_url = None
+
             for element in paragraph.children:
                 if not isinstance(element, NavigableString):
                     continue
-                match = self.ALBUM_RE.match(element)
-                if not match:
-                    continue
-                title = match.group(1).strip()
-                # TODO this currently ignores
-                # Canoue - イセルディア戦記　暗謀と信義の城楼
-                # because the (C95) marker is alone on the line above so it gets
-                # parsed as the empty string. We could just take the next line
-                # as the title on an empty string, except then we run into
-                # trouble in cases like [various formats] which also match our
-                # regex and get parsed as the empty string, but are not followed
-                # by an album title. That said, false negatives are
-                # significantly worse than false positives due to our fuzzy
-                # string matching pass at the end, so it's probably worth
-                # implementing what I described above.
-                if title == "":
-                    continue
-                album = Album(title, url)
+
+                title = title or self._title_from_element(element)
+                download_url = (
+                    download_url or self._download_url_from_element(element)
+                )
+
+            if title:
+                album = Album(title, url, download_url)
                 albums.append(album)
         return albums
+
+    def _title_from_element(self, element):
+        match = self.ALBUM_RE.match(element)
+        if not match:
+            return None
+
+        title = match.group(1).strip()
+        if title == "":
+            return None
+
+        return title
+
+    def _download_url_from_element(self, element):
+        # TODO also look for mega.nz or mediafire urls and fallback to those.
+        # download urls have some weird formats, eg
+        #
+        # DL:
+        # https://mega.nz/#!D3hjAaoa!MI404Xpj0SsLkMb6HLV3ggqvzb0_BB4HMb7uAvKfiQE
+        #
+        # or
+        #
+        # [FLAC] DL:https://mega.nz/#F!3U8nDBZC!zDSI8pjKeoUQm-z2FwntAg
+        # [320kbps]: https://mega.nz/#F!DMdXHAyA!JeB4NnptfEW7NVgq4fhfBQ XFD: https://youtu.be/Y33WrCSpbts
+        #
+        match = self.DOWNLOAD_URL_RE.match(element)
+        if not match:
+            return None
+
+        download_url = match.group(1).strip()
+        if download_url == "":
+            return None
+
+        return download_url
 
 
 class AudioForYou(AlbumSource):
