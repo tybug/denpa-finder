@@ -11,13 +11,14 @@ class DenpaFinder:
     DATA_SOURCES = [RTL(), SilenceTheDiscord(), AudioForYou(), DenpaGist()]
 
     def __init__(self):
-        self.albums = []
-        for data_source in self.DATA_SOURCES:
-            self.albums += data_source.albums
+        self.albums = self._albums_from_data_sources()
 
     def refresh(self):
         for data_source in self.DATA_SOURCES:
             data_source.refresh()
+        # we might have added new albums or modified existing ones, so rewrite
+        # `self.albums` with the new albums from the data sources
+        self.albums = self._albums_from_data_sources()
 
     def matches(self, q, ratio=0.8):
         if isinstance(q, str):
@@ -32,3 +33,9 @@ class DenpaFinder:
             if q(assignment):
                 ret.append(album)
         return ret
+
+    def _albums_from_data_sources(self):
+        albums = []
+        for data_source in self.DATA_SOURCES:
+            albums += data_source.albums
+        return albums
