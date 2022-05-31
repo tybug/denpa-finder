@@ -21,6 +21,11 @@ setup(
     install_requires=[
         "fuzzywuzzy",
         "bs4",
-        "requests"
+        "requests",
+        # for fast beautifulsoup parsing. not necessary, but removes warnings
+        "lxml",
+        # for fast fuzzywuzzy levenshtein distance (falls back to pure python
+        # `SequenceMatcher`). Not necessary, but removes warnings
+        "python-levenshtein"
     ]
 )
